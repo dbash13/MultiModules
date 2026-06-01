@@ -1,0 +1,4 @@
+
+
+#To not upload zip files
+*.zip
