@@ -2,10 +2,8 @@ name: Relase PWSH Module as draft
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'Modules/**' #Only when changues on main modules folder
+    tags:
+      - "v*.*.*"
 
   workflow_dispatch:
 
@@ -19,11 +17,6 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v5
 
-    - name: Release tag
-      id: generateTag
-      run: |
-        dateTime=$(date +'%Y.%m.%d')
-        echo "releaseTag=v${dateTime}.${{ github.run_number }}" >> $GITHUB_OUTPUT
 
     - name: Zip modules folder
       run: |
@@ -34,8 +27,8 @@ jobs:
     - name: Create release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ steps.generateTag.outputs.releaseTag }}
-        name: Release ${{ steps.generateTag.outputs.releaseTag }}
+        tag_name: ${{github.ref_name}}
+        name: Release ${{github.ref_name}}
         draft: true
         prerelease: false
         files: modules-artifact.zip
